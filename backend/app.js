@@ -42,8 +42,8 @@ app.use((req, res, next) => {
   console.log('Response sent successfully!');
 });
 
-app.use('/api/auth/signup', userRoutes);
-app.use('/api/auth/login', userRoutes);
+app.use('/api/auth', userRoutes);
+app.use('/api/auth', userRoutes);
 
 
 module.exports = app;
