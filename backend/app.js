@@ -2,6 +2,7 @@
 
 const express = require('express');
 const app = express();
+app.use(express.json());
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
 
@@ -22,32 +23,19 @@ app.use((req, res, next) => {
   next();
 });
 
-
-app.use('/api/sauces', (req, res, next) => {
-  const sauces = [
-  ];
-  res.status(200).json(sauces);
+app.post('/api/auth', (req, res, next) => {
+  console.log(req.body);
+  res.status(201).json({
+  });
 });
 
-
-app.use((req, res, next) => {
-  console.log('Request received!');
-  next();
+app.get('/api/sauces', (req, res, next) => {
+  console.log(req.body);
+  res.status(201).json({
+    message: 'Thing created successfully!'
+  });
 });
 
-app.use((req, res, next) => {
-  res.status(201);
-  next();
-});
-
-app.use((req, res, next) => {
-  res.json({ message: 'Your request was successful!' });
-  next();
-});
-
-app.use((req, res, next) => {
-  console.log('Response sent successfully!');
-});
 
 app.use('/api/auth', userRoutes);
 
