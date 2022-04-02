@@ -25,19 +25,6 @@ app.use((req, res, next) => {
 
 app.use('/api/sauces', (req, res, next) => {
   const sauces = [
-    {
-      userId: '',
-      name: '',
-      manufacturer: '',
-      description: '',
-      maiPepper: '',
-      imaUrl: '',
-      heat: '',
-      likes: '',
-      dislikes: '',
-      usersLiked: '',
-      usersDisliked: ''
-    },
   ];
   res.status(200).json(sauces);
 });
