@@ -29,11 +29,8 @@ app.post('/api/auth', (req, res, next) => {
   });
 });
 
-app.get('/api/sauces', (req, res, next) => {
-  console.log(req.body);
-  res.status(201).json({
-    message: 'Thing created successfully!'
-  });
+app.use('/api/sauces', (req, res, next) => {
+  res.status(200).json(sauces);
 });
 
 
