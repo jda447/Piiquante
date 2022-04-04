@@ -29,9 +29,13 @@ app.post('/api/auth', (req, res, next) => {
   });
 });
 
-app.use('/api/sauces', (req, res, next) => {
-  res.status(200).json(sauces);
+app.post('/api/sauces', (req, res, next) => {
+  console.log(req.body);
+  res.status(201).json({
+    message: 'Sauce created successfully!'
+  });
 });
+
 
 
 app.use('/api/auth', userRoutes);
