@@ -2,10 +2,11 @@
 
 const express = require('express');
 const app = express();
-app.use(express.json());
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
+const sauceRoutes = require('./routes/sauces');
 
+app.use(express.json());
 
 mongoose.connect('mongodb+srv://jon:bluebirds1927@piiquante.9kwsg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
   .then(() => {
@@ -23,21 +24,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/api/auth', (req, res, next) => {
-  console.log(req.body);
-  res.status(201).json({
-  });
-});
-
-app.post('/api/sauces', (req, res, next) => {
-  console.log(req.body);
-  res.status(201).json({
-    message: 'Sauce created successfully!'
-  });
-});
-
-
-
 app.use('/api/auth', userRoutes);
+app.use('/api/sauces', sauceRoutes);
 
 module.exports = app;
