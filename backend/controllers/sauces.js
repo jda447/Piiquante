@@ -2,13 +2,15 @@ const Sauce = require('../routes/sauces');
 //const jwt = require('jsonwebtoken');
 
 exports.addSauce = (req, res, next) => {
+  req.body.thing = JSON.parse(req.body.thing);
+  const url = req.protocol + '://' + req.get('host');
   const sauce = new Sauce({
-    name: req.body.name,
-    manufacturer: req.body.manufacturer,
-    description: req.body.description,
-    imageUrl: req.body.imageUrl,
-    mainPepper: req.body.mainPepper,
-    heat: req.body.heat,
+    name: req.body.sauce.name,
+    manufacturer: req.body.sauce.manufacturer,
+    description: req.body.sauce.description,
+    imageUrl: url + '/images/' + req.file.filename,
+    mainPepper: req.body.sauce.mainPepper,
+    heat: req.body.sauce.heat,
   });
   sauce.save().then(
     () => {
