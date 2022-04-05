@@ -2,7 +2,7 @@ const Sauce = require('../routes/sauces');
 //const jwt = require('jsonwebtoken');
 
 exports.addSauce = (req, res, next) => {
-  req.body.thing = JSON.parse(req.body.thing);
+  req.body.sauce = JSON.parse(req.body.sauce);
   const url = req.protocol + '://' + req.get('host');
   const sauce = new Sauce({
     name: req.body.sauce.name,
