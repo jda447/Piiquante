@@ -1,4 +1,4 @@
-const Sauce = require('../routes/sauces');
+const Sauce = require('../models/sauces');
 
 exports.addSauce = (req, res, next) => {
   req.body.sauce = JSON.parse(req.body.sauce);
@@ -34,9 +34,9 @@ exports.getAllSauces = (req, res, next) => {
     }
   ).catch(
     (error) => {
-      res.status(400).json({
-        error: error
-      });
+      res.status(400).json(
+        error
+      );
     }
   );
 }
