@@ -1,16 +1,15 @@
-//mongodb+srv://jon:<password>@piiquante.9kwsg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
+require('dotenv').config();
 
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauces');
 
 app.use(express.json());
 
-mongoose.connect('mongodb+srv://jon:bluebirds1927@piiquante.9kwsg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('Successfully connected to MongoDB Atlas!');
   })
