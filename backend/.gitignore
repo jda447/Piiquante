@@ -1,4 +1,3 @@
 /node_modules
 /images
-backend\.env
-.env
+/env
