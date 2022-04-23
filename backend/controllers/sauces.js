@@ -11,7 +11,11 @@ exports.addSauce = (req, res, next) => {
     description: req.body.sauce.description,
     imageUrl: url + '/images/' + req.file.filename,
     mainPepper: req.body.sauce.mainPepper,
-    heat: req.body.sauce.heat
+    heat: req.body.sauce.heat,
+    likes: 0,
+    dislikes: 0,
+    usersLiked: [],
+    usersDisliked: []
   });
   sauce.save().then(
     () => {
@@ -21,9 +25,9 @@ exports.addSauce = (req, res, next) => {
     }
   ).catch(
     (error) => {
-      res.status(400).json({
-        error: error
-      });
+      res.status(400).json(
+        error
+      );
     }
   );
 }
@@ -37,9 +41,9 @@ exports.findOneSauce = (req, res, next) => {
     }
   ).catch(
     (error) => {
-      res.status(404).json({
-        error: error
-      });
+      res.status(404).json(
+        error
+      );
     }
   );
 }
@@ -79,9 +83,9 @@ exports.modifySauce = (req, res, next) => {
     }
   ).catch(
     (error) => {
-      res.status(400).json({
-        error: error
-      });
+      res.status(400).json(
+        error
+      );
     }
   );
 };
@@ -99,9 +103,9 @@ exports.deleteSauce = (req, res, next) => {
           }
         ).catch(
           (error) => {
-            res.status(400).json({
-              error: error
-            });
+            res.status(400).json(
+              error
+            );
           }
         );
       });
