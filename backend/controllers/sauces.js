@@ -14,8 +14,8 @@ exports.addSauce = (req, res, next) => {
     heat: req.body.sauce.heat,
     likes: 0,
     dislikes: 0,
-    usersLiked: [],
-    usersDisliked: []
+    usersLiked: [{userId: String}],
+    usersDisliked: [{userId: String}]
   });
   sauce.save().then(
     () => {
