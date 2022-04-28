@@ -14,20 +14,16 @@ exports.addSauce = (req, res, next) => {
     heat: req.body.sauce.heat,
     likes: 0,
     dislikes: 0,
-    usersLiked: [{userId: String}],
-    usersDisliked: [{userId: String}]
+    usersLiked: [],
+    usersDisliked: []
   });
   sauce.save().then(
     () => {
-      res.status(201).json({
-        message: 'Sauce saved successfully!'
-      });
+      res.status(201).json();
     }
   ).catch(
     (error) => {
-      res.status(400).json(
-        error
-      );
+      res.status(400).json(error);
     }
   );
 }
@@ -41,9 +37,7 @@ exports.findOneSauce = (req, res, next) => {
     }
   ).catch(
     (error) => {
-      res.status(404).json(
-        error
-      );
+      res.status(404).json(error);
     }
   );
 }
@@ -77,15 +71,11 @@ exports.modifySauce = (req, res, next) => {
   }
   Sauce.updateOne({_id: req.params.id}, sauce).then(
     () => {
-      res.status(201).json({
-        message: 'Sauce updated successfully!'
-      });
+      res.status(201).json();
     }
   ).catch(
     (error) => {
-      res.status(400).json(
-        error
-      );
+      res.status(400).json(error);
     }
   );
 };
@@ -97,15 +87,11 @@ exports.deleteSauce = (req, res, next) => {
       fs.unlink('images/' + filename, () => {
         Sauce.deleteOne({_id: req.params.id}).then(
           () => {
-            res.status(200).json({
-              message: 'Deleted!'
-            });
+            res.status(200).json();
           }
         ).catch(
           (error) => {
-            res.status(400).json(
-              error
-            );
+            res.status(400).json(error);
           }
         );
       });
@@ -120,9 +106,7 @@ exports.getAllSauces = (req, res, next) => {
     }
   ).catch(
     (error) => {
-      res.status(400).json(
-        error
-      );
+      res.status(400).json(error);
     }
   );
 }
