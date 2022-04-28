@@ -19,7 +19,7 @@ exports.addSauce = (req, res, next) => {
   });
   sauce.save().then(
     () => {
-      res.status(201).json();
+      res.status(201).json(sauce);
     }
   ).catch(
     (error) => {
