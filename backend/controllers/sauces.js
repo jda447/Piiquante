@@ -86,7 +86,7 @@ exports.likeSauce = (req, res, next) => {
   if (Sauce.usersLiked.includes(req.params.id))
   Sauce.update({_id: req.params.id}).then(
     { Sauce },
-    { $inc: { likes: 0 },
+    { $inc: { likes: -1 },
       $pull: { usersLiked: [_id] }}
     );
   else (
@@ -98,7 +98,7 @@ exports.likeSauce = (req, res, next) => {
   if (Sauce.usersDisliked.includes(req.params.id))
   Sauce.update({_id: req.params.id}).then(
     { Sauce },
-    { $inc: { dislikes: 0 },
+    { $inc: { dislikes: -1 },
       $pull: { usersDisliked: [_id] }}
     );
   else (
