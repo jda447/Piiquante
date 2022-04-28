@@ -1,6 +1,31 @@
 const Sauce = require('../models/sauces');
 const fs = require('fs');
 
+exports.likeSauce = (req, res, next) => {
+  if (Sauce.usersLiked.includes(req.params.id))
+  Sauce.updateOne({_id: req.params.id}).then(
+    
+    { $push: { usersLiked: [_id] }},
+    { $inc: { likes: 1 }},
+    
+    { $push: { usersDisliked: [_id] }},
+    { $inc: { dislikes: 1 }},
+  )
+  Sauce.updateOne({_id: req.params.id}.then(
+    () => {
+      res.status(201).json({
+        message: 'Updated!'
+      });
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json(
+        error
+      );
+    })
+  );
+};
+
 exports.addSauce = (req, res, next) => {
   req.body.sauce = JSON.parse(req.body.sauce);
   const url = req.protocol + '://' + req.get('host');
@@ -47,6 +72,11 @@ exports.findOneSauce = (req, res, next) => {
     }
   );
 }
+
+
+exports.modifySauce = (req, res, next) => {
+  let sauce = new Sauce({ _id: req.params._id });
+  Object.assign
 
 exports.modifySauce = (req, res, next) => {
   let sauce = new Sauce({ _id: req.params._id });
