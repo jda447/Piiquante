@@ -110,3 +110,33 @@ exports.getAllSauces = (req, res, next) => {
     }
   );
 }
+
+exports.likeSauce = (req, res, next) => {
+  let sauce = new Sauce({ _id: req.params.id });
+  let _id = req.params.id;
+  usersLiked = req.params.usersLiked;
+  usersDisLiked = req.params.usersDisliked;
+  if (!sauce.usersLiked.includes([_id]),
+    { $inc: { likes: 1 },
+      $push: { usersLiked: [_id] }}
+    )
+  if (!sauce.usersDisliked.includes([_id]),
+    { $inc: { dislikes: 1 },
+      $push: { usersDisliked: [_id] }}
+    );
+  else (
+    { $inc: { likes: -1 },
+      $pull: { usersLiked: [_id] }},
+    { $inc: { dislikes: -1 },
+      $pull: { usersDisliked: [_id] }}
+  );
+  Sauce.updateOne({_id: req.params.id}, sauce).then(
+    () => {
+      res.status(201).json(sauce);
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json(error);
+    }
+  );
+};
