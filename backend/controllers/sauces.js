@@ -42,44 +42,6 @@ exports.findOneSauce = (req, res, next) => {
   );
 }
 
-exports.modifySauce = (req, res, next) => {
-  let sauce = new Sauce({ _id: req.params._id });
-  if (req.file) {
-    const url = req.protocol + '://' + req.get('host');
-    req.body.sauce = JSON.parse(req.body.sauce);
-    sauce = {
-      _id: req.params.id,
-      userId: req.body.sauce.userId,
-      name: req.body.sauce.name,
-      manufacturer: req.body.sauce.manufacturer,
-      description: req.body.sauce.description,
-      imageUrl: url + '/images/' + req.file.filename,
-      mainPepper: req.body.sauce.mainPepper,
-      heat: req.body.sauce.heat
-    };
-  } else {
-    sauce = {
-      _id: req.params.id,
-      userId: req.body.sauce.userId,
-      name: req.body.sauce.name,
-      manufacturer: req.body.sauce.manufacturer,
-      description: req.body.sauce.description,
-      imageUrl: req.body.imageUrl,
-      mainPepper: req.body.sauce.mainPepper,
-      heat: req.body.sauce.heat
-    };
-  }
-  Sauce.updateOne({_id: req.params.id}, sauce).then(
-    () => {
-      res.status(201).json();
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json(error);
-    }
-  );
-};
-
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({_id: req.params.id}).then(
     (sauce) => {
@@ -103,6 +65,22 @@ exports.getAllSauces = (req, res, next) => {
   Sauce.find().then(
     (sauces) => {
       res.status(200).json(sauces);
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json(error);
+    }
+  );
+}
+
+exports.modifySauce = (req, res, next) => {
+  let sauce = new Sauce({ _id: req.params._id });
+  const target = (sauce);
+  const source = (req.body.sauce);
+  const modifiedSauce = Object.assign(target, source);
+  sauce.updateOne({_id: req.params.id}, modifiedSauce).then(
+    () => {
+      res.status(201).json(modifiedSauce);
     }
   ).catch(
     (error) => {
