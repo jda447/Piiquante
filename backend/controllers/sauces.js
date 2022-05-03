@@ -116,27 +116,27 @@ exports.likeSauce = (req, res, next) => {
   let userId = req.params.userId;
   usersLiked = req.params.usersLiked;
   usersDisLiked = req.params.usersDisliked;
-  if (!sauce.usersLiked.includes([userId]),
-    { $inc: { likes: 1 },
-      $push: { usersLiked: [userId] }}
+    if (!sauce.usersLiked.includes(userId)) {(
+      { $inc: { likes: 1 },
+      $push: { usersLiked: userId }}
     )
-  if (!sauce.usersDisliked.includes([userId]),
-    { $inc: { dislikes: 1 },
-      $push: { usersDisliked: [userId] }}
-    );
-  else (
-    { $inc: { likes: -1 },
+    } else if (!sauce.usersDisliked.includes(userId)) {(
+      { $inc: { dislikes: 1 },
+      $push: { usersDisLiked: userId }}
+    )
+    } else {
+      ({ $inc: { likes: -1 },
       $pull: { usersLiked: [userId] }},
     { $inc: { dislikes: -1 },
       $pull: { usersDisliked: [userId] }}
-  );
-  Sauce.updateOne({_id: req.params.id}, sauce).then(
-    () => {
-      res.status(201).json(sauce);
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json(error);
-    }
-  );
-};
+      )}
+    Sauce.updateOne({_id: req.params.id}, sauce).then(
+      () => {
+        res.status(201).json(sauce);
+      }
+    ).catch(
+      (error) => {
+        res.status(400).json(error);
+      }
+    );
+  };
