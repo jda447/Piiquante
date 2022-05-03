@@ -112,10 +112,11 @@ exports.getAllSauces = (req, res, next) => {
 }
 
 exports.likeSauce = (req, res, next) => {
-  let sauce = new Sauce({ _id: req.params.id });
   let userId = req.params.userId;
   usersLiked = req.params.usersLiked;
   usersDisLiked = req.params.usersDisliked;
+  Sauce.findOne({_id: req.params.id}).then(
+    (sauce) => {
     if (!sauce.usersLiked.includes(userId)) {(
       { $inc: { likes: 1 },
       $push: { usersLiked: userId }}
@@ -139,4 +140,5 @@ exports.likeSauce = (req, res, next) => {
         res.status(400).json(error);
       }
     );
-  };
+  })
+};
