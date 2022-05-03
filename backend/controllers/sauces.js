@@ -113,22 +113,22 @@ exports.getAllSauces = (req, res, next) => {
 
 exports.likeSauce = (req, res, next) => {
   let sauce = new Sauce({ _id: req.params.id });
-  let _id = req.params.id;
+  let userId = req.params.userId;
   usersLiked = req.params.usersLiked;
   usersDisLiked = req.params.usersDisliked;
-  if (!sauce.usersLiked.includes([_id]),
+  if (!sauce.usersLiked.includes([userId]),
     { $inc: { likes: 1 },
-      $push: { usersLiked: [_id] }}
+      $push: { usersLiked: [userId] }}
     )
-  if (!sauce.usersDisliked.includes([_id]),
+  if (!sauce.usersDisliked.includes([userId]),
     { $inc: { dislikes: 1 },
-      $push: { usersDisliked: [_id] }}
+      $push: { usersDisliked: [userId] }}
     );
   else (
     { $inc: { likes: -1 },
-      $pull: { usersLiked: [_id] }},
+      $pull: { usersLiked: [userId] }},
     { $inc: { dislikes: -1 },
-      $pull: { usersDisliked: [_id] }}
+      $pull: { usersDisliked: [userId] }}
   );
   Sauce.updateOne({_id: req.params.id}, sauce).then(
     () => {
