@@ -91,8 +91,6 @@ exports.modifySauce = (req, res, next) => {
 
 exports.likeSauce = (req, res, next) => {
   let userId = req.params.userId;
-  usersLiked = req.params.usersLiked;
-  usersDisLiked = req.params.usersDisliked;
   Sauce.findOne({_id: req.params.id}).then(
     (sauce) => {
     if (!sauce.usersLiked.includes(userId)) {(
