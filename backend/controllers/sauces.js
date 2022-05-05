@@ -120,3 +120,36 @@ exports.likeSauce = (req, res, next) => {
     );
   })
 };
+
+
+/*
+exports.likeSauce = (req, res, next) => {
+  Sauce.updateOne(
+    { userId: req.params.userId, 
+      usersLiked: { $ne: req.params.userId }
+    },
+    {$inc: { likes: 1 },
+      $push: { usersLiked: req.params.userId }
+    }
+  )
+  Sauce.updateOne(
+    { userId: req.params.userId, 
+      dislikes: req.params.userId },
+    { $inc: { dislikes: -1 },
+      $pull: { usersDisLiked: req.params.userId }
+    })
+    Sauce.find(
+      { userId: req.params.userId, },
+      { usersLiked: { $elemMatch: { $eq: req.params.userId }
+    }
+    }).then(
+    () => {
+      res.status(201).json(Sauce);
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json(error);
+    }
+  );
+}
+*/
