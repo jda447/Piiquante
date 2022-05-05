@@ -74,11 +74,12 @@ exports.getAllSauces = (req, res, next) => {
 }
 
 exports.modifySauce = (req, res, next) => {
-  let sauce = new Sauce({ _id: req.params._id });
+  Sauce.findOne({_id: req.params.id}).then(
+    (sauce) => {
   const target = (sauce);
   const source = (req.body.sauce);
   const modifiedSauce = Object.assign(target, source);
-  sauce.updateOne({_id: req.params.id}, modifiedSauce).then(
+  Sauce.updateOne({_id: req.params.id}, modifiedSauce).then(
     () => {
       res.status(201).json(modifiedSauce);
     }
@@ -87,6 +88,7 @@ exports.modifySauce = (req, res, next) => {
       res.status(400).json(error);
     }
   );
+ })
 }
 
 exports.likeSauce = (req, res, next) => {
