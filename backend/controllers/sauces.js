@@ -87,21 +87,33 @@ exports.modifySauce = (req, res, next) => {
 
 exports.likeSauce = (req, res, next) => {
   const newObj = {};
-  if (like === 1) {
+  if (req.body.like === 1) {
     newObj.$inc = { likes: 1 }
-		newObj.$push = { usersLiked: req.body.userId }
-  } else if (like === -1) {
+		newObj.$push = { usersLiked: req.params.userId }
+  } else if (req.body.like === -1) {
     newObj.$inc = { dislikes: 1 }
-    newObj.$push = { usersDisLiked: userId }
+    newObj.$push = { usersDisLiked: req.params.userId }
   } else {
     Sauce.findOne({_id: req.params.id}).then(
       (sauce) => {
+        if (sauce.usersLiked.includes(req.params.userId)) {
 				newObj.$inc = { likes: -1 }
-				newObj.$pull = { usersLiked: req.body.userId }
+				newObj.$pull = { usersLiked: req.params.userId }
+        } else {
 				newObj.$inc = { dislikes: -1 }
-				newObj.$pull = { usersDisliked: req.body.userId }
+				newObj.$pull = { usersDisliked: req.params.userId }
 			}
-  )}
+      Sauce.updateOne({_id: req.params.id}, newObj).then(
+        () => {
+          res.status(201).json(sauce);
+        }
+      ).catch(
+        (error) => {
+          res.status(400).json(error);
+        }
+      );
+    })
+  }
 };
     
   
