@@ -74,23 +74,38 @@ exports.getAllSauces = (req, res, next) => {
 }
 
 exports.modifySauce = (req, res, next) => {
-  Sauce.findOne({_id: req.params.id}).then(
-    (sauce) => {
-  const target = (sauce);
-  const source = (req.body.sauce);
-  const modifiedSauce = Object.assign(target, source);
-  Sauce.updateOne({_id: req.params.id}, modifiedSauce).then(
+  Sauce.updateOne({_id: req.params.id}, req.body.sauce).then(
     () => {
-      res.status(201).json(modifiedSauce);
+      res.status(201).json({message: 'success'});
     }
   ).catch(
     (error) => {
       res.status(400).json(error);
     }
   );
- })
 }
 
+exports.likeSauce = (req, res, next) => {
+  const newObj = {};
+  if (like === 1) {
+    newObj.$inc = { likes: 1 }
+		newObj.$push = { usersLiked: req.body.userId }
+  } else if (like === -1) {
+    newObj.$inc = { dislikes: 1 }
+    newObj.$push = { usersDisLiked: userId }
+  } else {
+    Sauce.findOne({_id: req.params.id}).then(
+      (sauce) => {
+				newObj.$inc = { likes: -1 }
+				newObj.$pull = { usersLiked: req.body.userId }
+				newObj.$inc = { dislikes: -1 }
+				newObj.$pull = { usersDisliked: req.body.userId }
+			}
+  )}
+};
+    
+  
+/*
 exports.likeSauce = (req, res, next) => {
   let userId = req.params.userId;
   Sauce.findOne({_id: req.params.id}).then(
@@ -120,6 +135,7 @@ exports.likeSauce = (req, res, next) => {
     );
   })
 };
+*/
 
 
 /*
