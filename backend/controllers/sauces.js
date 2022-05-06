@@ -86,6 +86,27 @@ exports.modifySauce = (req, res, next) => {
 }
 
 exports.likeSauce = (req, res, next) => {
+  const sauce = {};
+  if (req.body.like === 1) {
+    sauce.$inc = { likes: 1 }
+		sauce.$addToSet = { usersLiked: req.body.userId }
+  } else {
+    sauce.$inc = { dislikes: 1 }
+    sauce.$addToSet = { usersDisLiked: req.body.userId }
+  }
+  Sauce.updateOne({_id: req.params.id}, sauce).then(
+    () => {
+      res.status(201).json({ message: 'Success!' });
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json(error);
+    }
+  )
+};
+
+/*
+exports.likeSauce = (req, res, next) => {
   const newObj = {};
   if (req.body.like === 1) {
     newObj.$inc = { likes: 1 }
@@ -115,69 +136,4 @@ exports.likeSauce = (req, res, next) => {
     })
   }
 };
-    
-  
-/*
-exports.likeSauce = (req, res, next) => {
-  let userId = req.params.userId;
-  Sauce.findOne({_id: req.params.id}).then(
-    (sauce) => {
-    if (!sauce.usersLiked.includes(userId)) {(
-      { $inc: { likes: 1 },
-      $push: { usersLiked: userId }}
-    )
-    } else if (!sauce.usersDisliked.includes(userId)) {(
-      { $inc: { dislikes: 1 },
-      $push: { usersDisLiked: userId }}
-    )
-    } else {
-      ({ $inc: { likes: -1 },
-      $pull: { usersLiked: [userId] }},
-    { $inc: { dislikes: -1 },
-      $pull: { usersDisliked: [userId] }}
-      )}
-    Sauce.updateOne({_id: req.params.id}, sauce).then(
-      () => {
-        res.status(201).json(sauce);
-      }
-    ).catch(
-      (error) => {
-        res.status(400).json(error);
-      }
-    );
-  })
-};
-*/
-
-
-/*
-exports.likeSauce = (req, res, next) => {
-  Sauce.updateOne(
-    { userId: req.params.userId, 
-      usersLiked: { $ne: req.params.userId }
-    },
-    {$inc: { likes: 1 },
-      $push: { usersLiked: req.params.userId }
-    }
-  )
-  Sauce.updateOne(
-    { userId: req.params.userId, 
-      dislikes: req.params.userId },
-    { $inc: { dislikes: -1 },
-      $pull: { usersDisLiked: req.params.userId }
-    })
-    Sauce.find(
-      { userId: req.params.userId, },
-      { usersLiked: { $elemMatch: { $eq: req.params.userId }
-    }
-    }).then(
-    () => {
-      res.status(201).json(Sauce);
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json(error);
-    }
-  );
-}
 */
