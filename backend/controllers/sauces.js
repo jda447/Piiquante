@@ -89,11 +89,21 @@ exports.likeSauce = (req, res, next) => {
   const sauce = {};
   if (req.body.like === 1) {
     sauce.$inc = { likes: 1 }
-		sauce.$addToSet = { usersLiked: req.body.userId }
-  } else {
+		sauce.$push = { usersLiked: req.body.userId }
+  } else if (req.body.like === -1) {
     sauce.$inc = { dislikes: 1 }
-    sauce.$addToSet = { usersDisLiked: req.body.userId }
-  }
+    sauce.$push = { usersDisliked: req.body.userId }
+  } else {
+    Sauce.findOne(sauce).then(
+      (sauce) => {
+        if (!sauce.usersLiked.includes(req.body.userId)) {
+          sauce.$inc = { likes: -1 };
+          sauce.$pull = { usersLiked: req.body.userId };
+        } else {
+          sauce.$inc = { dislikes: -1 };
+          sauce.$pull = { usersDisliked: req.body.userId };
+        }
+      })};
   Sauce.updateOne({_id: req.params.id}, sauce).then(
     () => {
       res.status(201).json({ message: 'Success!' });
