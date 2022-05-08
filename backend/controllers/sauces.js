@@ -94,9 +94,9 @@ exports.likeSauce = (req, res, next) => {
     sauce.$inc = { dislikes: 1 }
     sauce.$push = { usersDisliked: req.body.userId }
   } else {
-    Sauce.findOne({_id: req.params.id}).then(
-      (sauce) => {
-        if (sauce.usersLiked.includes(req.params.userId)) {
+    Sauce.findOne({_id: req.params.id}, sauce).then(
+      () => {
+        if (sauce.usersLiked.includes(req.body.userId)) {
           sauce.$inc = { likes: -1 };
           sauce.$pull = { usersLiked: req.body.userId };
         } else {
