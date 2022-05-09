@@ -86,7 +86,7 @@ exports.modifySauce = (req, res, next) => {
 }
 
 exports.likeSauce = (req, res, next) => {
-  let sauce = {};
+  const sauce = {};
   if (req.body.like === 1) {
     sauce.$inc = { likes: 1 }
 		sauce.$push = { usersLiked: req.body.userId }
@@ -94,14 +94,15 @@ exports.likeSauce = (req, res, next) => {
     sauce.$inc = { dislikes: 1 }
     sauce.$push = { usersDisliked: req.body.userId }
   } else {
-    Sauce.findOne({_id: req.params.id}, sauce).then(
+    Sauce.findOneAndUpdate({_id: req.params.id}, sauce).then(
       (sauce) => {
         if (sauce.usersLiked.includes(req.body.userId)) {
-          sauce.$inc = { likes: -1 };
-          sauce.$pull = { usersLiked: req.body.userId };
+          console.log(sauce.usersLiked);
+          sauce.$inc = { likes: -1 }
+          sauce.$pull = { usersLiked: req.body.userId }
         } else {
-          sauce.$inc = { dislikes: -1 };
-          sauce.$pull = { usersDisliked: req.body.userId };
+          sauce.$inc = { dislikes: -1 }
+          sauce.$pull = { usersDisliked: req.body.userId }
         }
       })
   }
