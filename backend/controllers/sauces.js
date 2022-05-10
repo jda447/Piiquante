@@ -94,7 +94,7 @@ exports.likeSauce = (req, res, next) => {
     sauce.$inc = { dislikes: 1 }
     sauce.$push = { usersDisliked: req.body.userId }
   } else {
-    Sauce.findOneAndUpdate({_id: req.params.id}, sauce).then(
+    Sauce.findOneAndUpdate({_id: req.params.id, upsert: true, returnNewDocument: true}).then(
       (sauce) => {
         if (sauce.usersLiked.includes(req.body.userId)) {
           console.log(sauce.usersLiked);
