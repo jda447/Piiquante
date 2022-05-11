@@ -138,12 +138,13 @@ exports.likeSauce = (req, res, next) => {
         if (sauce.usersLiked.includes(req.body.userId)) {
           console.log(sauce.usersLiked);
           sauce.$inc = { likes: -1 }
-          sauce.$pull = { usersLiked: req.body.userId }
+          sauce.$pull = { usersLiked: { $eq: req.body.userId } }
         } else {
           sauce.$inc = { dislikes: -1 }
-          sauce.$pull = { usersDisliked: req.body.userId }
+          sauce.$pull = { usersDisliked: { $eq: req.body.userId } }
         }
-      })
+      }
+    )
   }
   Sauce.updateOne({_id: req.params.id}, sauce).then(
     () => {
