@@ -92,6 +92,38 @@ exports.modifySauce = (req, res, next) => {
     )
 };
 
+/*
+exports.modifySauce = (req, res, next) => {
+  if (req.file) {
+    const url = req.protocol + '://' + req.get('host');
+    Sauce.updateOne({_id: req.params.id},
+      { $set: { name: req.body.name,
+        manufacturer: req.body.manufacturer,
+        description: req.body.description,
+        imageUrl: url + '/images/' + req.file.filename,
+        mainPepper: req.body.mainPepper,
+        heat: req.body.heat }}
+    )
+    } else {
+      Sauce.updateOne({_id: req.params.id},
+        { $set: { name: req.body.name,
+          manufacturer: req.body.manufacturer,
+          description: req.body.description,
+          mainPepper: req.body.mainPepper,
+          heat: req.body.heat }}
+      ).then(    
+      (sauce) => {
+        res.status(201).json(sauce);
+      }
+      ).catch(
+        (error) => {
+          res.status(400).json(error);
+        }
+      )
+    }
+  };
+  */
+
 exports.likeSauce = (req, res, next) => {
   const sauce = {};
   if (req.body.like === 1) {
