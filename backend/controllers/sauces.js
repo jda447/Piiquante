@@ -122,14 +122,13 @@ exports.likeSauce = (req, res, next) => {
       dislikedUsers.push(req.body.userId);
     } else {
       if (likedUsers.indexOf(req.body.userId)) {
-        console.log(likedUsers);
         { sauce.$inc = { likes: -1 } }
         { sauce.$pull = { usersLiked: req.body.userId} }
-        likedUsers.splice(0, 1, req.body.userId);
+        likedUsers.splice(0, 1);
       } else {
         { sauce.$inc = { dislikes: -1 } }
         { sauce.$pull = { usersDisliked: req.body.userId} }
-        dislikedUsers.splice(0, 1, req.body.userId);
+        dislikedUsers.splice(0, 1);
       }
     }
     Sauce.updateOne({_id: req.params.id}, sauce).then(
