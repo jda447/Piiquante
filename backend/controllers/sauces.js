@@ -138,11 +138,11 @@ exports.modifySauce = (req, res, next) => {
         (sauce) => {
           if (sauce.usersLiked.includes(req.body.userId)) {
             console.log(sauce.usersLiked);
-            sauce.$inc = { likes: -1 }
-            sauce.$pull = { usersLiked: { $eq: req.body.userId } }
+            { sauce.$inc = { likes: -1 } }
+            { sauce.$pull = { usersLiked: req.body.userId} }
           } else {
-            sauce.$inc = { dislikes: -1 }
-            sauce.$pull = { usersDisliked: { $eq: req.body.userId } }
+            { sauce.$inc = { dislikes: -1 } }
+            { sauce.$pull = { usersLiked: req.body.userId} }
           }
         }
       )
