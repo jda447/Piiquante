@@ -143,21 +143,17 @@ exports.modifySauce = (req, res, next) => {
           } else {
             { sauce.$inc = { dislikes: -1 } }
             { sauce.$pull = { usersLiked: req.body.userId} }
-          Sauce.updateOne({_id: req.params.id}, sauce).then(
-            () => {
-              res.status(201).json({ message: 'Success2!' });
-            })
+          }
         }
+      )
+    }
+    Sauce.updateOne({_id: req.params.id}, sauce).then(
+      () => {
+        res.status(201).json({ message: 'Success!' });
+      }
+    ).catch(
+      (error) => {
+        res.status(400).json(error);
       }
     )
-  }
-  Sauce.updateOne({_id: req.params.id}, sauce).then(
-    () => {
-      res.status(201).json({ message: 'Success!' });
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json(error);
-    }
-  )
-};
+  };
