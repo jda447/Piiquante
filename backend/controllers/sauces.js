@@ -124,24 +124,25 @@ exports.modifySauce = (req, res, next) => {
   };
   */
 
+  
 exports.likeSauce = (req, res, next) => {
   const sauce = {};
-  if (req.body.like === 1) {
-    sauce.$inc = { likes: 1 }
-		sauce.$push = { usersLiked: req.body.userId }
-  } else if (req.body.like === -1) {
-    sauce.$inc = { dislikes: 1 }
-    sauce.$push = { usersDisliked: req.body.userId }
-  } else {
-    Sauce.findOneAndUpdate({_id: req.params.id, upsert: true, returnNewDocument: true}).then(
-      (sauce) => {
+    if (req.body.like !== 0) {
+      if (req.body.like === 1) {
+      sauce.$inc = { likes: 1 }
+      sauce.$addToSet = { usersLiked: req.body.userId }
+    } else {
+      sauce.$inc = { dislikes: 1 }
+      sauce.$addToSet = { usersDisliked: req.body.userId }
+    }
+    } else {
+      Sauce.findOne({_id: req.params.id}).then(
+        (sauce) => {
         if (sauce.usersLiked.includes(req.body.userId)) {
           console.log(sauce.usersLiked);
           sauce.$inc = { likes: -1 }
-          sauce.$pull = { usersLiked: { $eq: req.body.userId } }
         } else {
           sauce.$inc = { dislikes: -1 }
-          sauce.$pull = { usersDisliked: { $eq: req.body.userId } }
         }
       }
     )
