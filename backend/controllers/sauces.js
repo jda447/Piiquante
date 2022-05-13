@@ -172,25 +172,22 @@ exports.likeSauce = (req, res, next) => {
     if (req.body.like === 1) {
       sauce.$inc = { likes: 1 }
       sauce.$addToSet = { usersLiked: req.body.userId }
+      Sauce.updateOne({_id: req.params.id}, sauce)
     } else {
       sauce.$inc = { dislikes: 1 }
       sauce.$addToSet = { usersDisliked: req.body.userId }
-      Sauce.updateOne({_id: req.params.id}, sauce).then(    
-        (sauce) => {
-          res.status(201).json(sauce);
-        })
+      Sauce.updateOne({_id: req.params.id}, sauce)
     } else {
-      Sauce.findOne({_id: req.params.id}).then(
-        (sauce) => {
-      if (sauce.usersLiked.includes(req.body.userId)) {
-        console.log(usersLiked);
+      // Sauce.findOne({_id: req.params.id}, sauce).then(
+      //   () => {
+      // if (sauce.usersLiked.includes(req.body.userId)) {
+      //   console.log(usersLiked);
         { sauce.$inc = { likes: -1 } }
         { sauce.$pull = { usersLiked: req.body.userId} }
-      } else {
-        { sauce.$inc = { dislikes: -1 } }
-        { sauce.$pull = { usersDisliked: req.body.userId} }
+      // } else {
+        // { sauce.$inc = { dislikes: -1 } }
+        // { sauce.$pull = { usersDisliked: req.body.userId} }
       }
-    })
     Sauce.updateOne({_id: req.params.id}, sauce).then(
       () => {
         res.status(201).json(sauce);
@@ -201,7 +198,6 @@ exports.likeSauce = (req, res, next) => {
       }
     )
   };
-}
 
 
 /* 
