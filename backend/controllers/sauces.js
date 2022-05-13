@@ -74,53 +74,112 @@ exports.getAllSauces = (req, res, next) => {
 }
 
 exports.modifySauce = (req, res, next) => {
+  const sauce = {};
+  const url = req.protocol + '://' + req.get('host');
+  req.body = sauce;
   if (req.file) {
-    const url = req.protocol + '://' + req.get('host');
     Sauce.updateOne({_id: req.params.id},
-      { $set: { name: req.body.name,
-        manufacturer: req.body.manufacturer,
-        description: req.body.description,
+      { $set: { name: sauce.name,
+        manufacturer: sauce.manufacturer,
+        description: sauce.description,
         imageUrl: url + '/images/' + req.file.filename,
-        mainPepper: req.body.mainPepper,
-        heat: req.body.heat }}
-    ).then(    
-      (sauce) => {
-        res.status(201).json(sauce);
-      })
-    } else {
-      Sauce.updateOne({_id: req.params.id},
-        { $set: { name: req.body.name,
-          manufacturer: req.body.manufacturer,
-          description: req.body.description,
-          mainPepper: req.body.mainPepper,
-          heat: req.body.heat }}
-      ).then(    
-      (sauce) => {
+        mainPepper: sauce.mainPepper,
+        heat: sauce.heat }}
+    ).then(
+      () => {
         res.status(201).json(sauce);
       }
-      ).catch(
-        (error) => {
-          res.status(400).json(error);
-        }
-      )
-    }
-  };
+    ).catch(
+      (error) => {
+        res.status(400).json(error);
+      }
+    )
+  }
+};
+
+// exports.modifySauce = (req, res, next) => {
+//   if (req.file) {
+//     const url = req.protocol + '://' + req.get('host');
+//     Sauce.updateOne({_id: req.params.id},
+//       { $set: { name: req.body.name,
+//         manufacturer: req.body.manufacturer,
+//         description: req.body.description,
+//         imageUrl: url + '/images/' + req.file.filename,
+//         mainPepper: req.body.mainPepper,
+//         heat: req.body.heat }}
+//     ).then(    
+//       (sauce) => {
+//         res.status(201).json(sauce);
+//       })
+//     } else {
+//       Sauce.updateOne({_id: req.params.id},
+//         { $set: { name: req.body.name,
+//           manufacturer: req.body.manufacturer,
+//           description: req.body.description,
+//           mainPepper: req.body.mainPepper,
+//           heat: req.body.heat }}
+//       ).then(    
+//       (sauce) => {
+//         res.status(201).json(sauce);
+//       }
+//       ).catch(
+//         (error) => {
+//           res.status(400).json(error);
+//         }
+//       )
+//     }
+//   };
   
+
+// exports.likeSauce = (req, res, next) => {
+//   const sauce = {};
+//   let likedUsers = [];
+//   let dislikedUsers = [];
+//   if (req.body.like !== 0)
+//     if (req.body.like === 1) {
+//       sauce.$inc = { likes: 1 }
+//       sauce.$addToSet = { usersLiked: req.body.userId }
+//       likedUsers.push(req.body.userId);
+//     } else {
+//       sauce.$inc = { dislikes: 1 }
+//       sauce.$addToSet = { usersDisliked: req.body.userId }
+//       dislikedUsers.push(req.body.userId);
+//     } else {
+//       if (likedUsers.indexOf(req.body.userId)) {
+//         { sauce.$inc = { likes: -1 } }
+//         { sauce.$pull = { usersLiked: req.body.userId} }
+//         likedUsers.splice(0, 1);
+//       } else {
+//         { sauce.$inc = { dislikes: -1 } }
+//         { sauce.$pull = { usersDisliked: req.body.userId} }
+//         dislikedUsers.splice(0, 1);
+//       }
+//     }
+//     Sauce.updateOne({_id: req.params.id}, sauce).then(
+//       () => {
+//         res.status(201).json(sauce);
+//       }
+//     ).catch(
+//       (error) => {
+//         res.status(400).json(error);
+//       }
+//     )
+// };
 
 exports.likeSauce = (req, res, next) => {
   const sauce = {};
-  let likedUsers = [];
-  let dislikedUsers = [];
   if (req.body.like !== 0)
     if (req.body.like === 1) {
       sauce.$inc = { likes: 1 }
       sauce.$addToSet = { usersLiked: req.body.userId }
-      likedUsers.push(req.body.userId);
     } else {
       sauce.$inc = { dislikes: 1 }
       sauce.$addToSet = { usersDisliked: req.body.userId }
-      dislikedUsers.push(req.body.userId);
     } else {
+      Sauce.updateOne({_id: req.params.id}, sauce).then(
+        () => {
+          res.status(201).json(sauce);
+        })
       if (likedUsers.indexOf(req.body.userId)) {
         { sauce.$inc = { likes: -1 } }
         { sauce.$pull = { usersLiked: req.body.userId} }
