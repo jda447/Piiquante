@@ -107,10 +107,10 @@ exports.modifySauce = (req, res, next) => {
 //         imageUrl: url + '/images/' + req.file.filename,
 //         mainPepper: req.body.mainPepper,
 //         heat: req.body.heat }}
-//     ).then(    
-//       (sauce) => {
-//         res.status(201).json(sauce);
-//       })
+    // ).then(    
+    //   (sauce) => {
+    //     res.status(201).json(sauce);
+    //   })
 //     } else {
 //       Sauce.updateOne({_id: req.params.id},
 //         { $set: { name: req.body.name,
@@ -175,21 +175,22 @@ exports.likeSauce = (req, res, next) => {
     } else {
       sauce.$inc = { dislikes: 1 }
       sauce.$addToSet = { usersDisliked: req.body.userId }
-    } else {
-      Sauce.updateOne({_id: req.params.id}, sauce).then(
-        () => {
+      Sauce.updateOne({_id: req.params.id}, sauce).then(    
+        (sauce) => {
           res.status(201).json(sauce);
         })
-      if (likedUsers.indexOf(req.body.userId)) {
+    } else {
+      Sauce.findOne({_id: req.params.id}).then(
+        (sauce) => {
+      if (sauce.usersLiked.includes(req.body.userId)) {
+        console.log(usersLiked);
         { sauce.$inc = { likes: -1 } }
         { sauce.$pull = { usersLiked: req.body.userId} }
-        likedUsers.splice(0, 1);
       } else {
         { sauce.$inc = { dislikes: -1 } }
         { sauce.$pull = { usersDisliked: req.body.userId} }
-        dislikedUsers.splice(0, 1);
       }
-    }
+    })
     Sauce.updateOne({_id: req.params.id}, sauce).then(
       () => {
         res.status(201).json(sauce);
@@ -199,7 +200,8 @@ exports.likeSauce = (req, res, next) => {
         res.status(400).json(error);
       }
     )
-};
+  };
+}
 
 
 /* 
