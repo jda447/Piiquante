@@ -168,28 +168,31 @@ exports.modifySauce = (req, res, next) => {
 
 exports.likeSauce = (req, res, next) => {
   const sauce = {};
+  const userId = req.body.userId;
+
   if (req.body.like !== 0)
     if (req.body.like === 1) {
       sauce.$inc = { likes: 1 }
-      sauce.$addToSet = { usersLiked: req.body.userId }
+      sauce.$addToSet = { usersLiked: userId }
       Sauce.updateOne({_id: req.params.id}, sauce).then(
         () => {res.status(201).json({message: 'Success!'});
         })
     } else {
       sauce.$inc = { dislikes: 1 }
-      sauce.$addToSet = { usersDisliked: req.body.userId }
+      sauce.$addToSet = { usersDisliked: userId }
       Sauce.updateOne({_id: req.params.id}, sauce).then(
         () => {res.status(201).json({message: 'Success!'});
         })
     } else {
       Sauce.findOne({_id: req.params.id}).then(
         (sauce) => {
-      if (sauce.usersLiked.includes(req.body.userId)) {
+      if (sauce.usersLiked.includes(userId)) {
+        // console.log(sauce.usersLiked);
         { sauce.$inc = { likes: -1 } }
-        { sauce.$pull = { usersLiked: req.body.userId} }
+        { sauce.$pull = { usersLiked: userId} }
       } else {
         { sauce.$inc = { dislikes: -1 } }
-        { sauce.$pull = { usersDisliked: req.body.userId} }
+        { sauce.$pull = { usersDisliked: userId} }
       }
       Sauce.updateOne({_id: req.params.id}, sauce).then(
         () => {
