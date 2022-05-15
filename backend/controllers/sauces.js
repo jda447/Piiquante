@@ -140,14 +140,15 @@ exports.likeSauce = (req, res, next) => {
       sauce.$inc = { likes: 1 }
       sauce.$addToSet = { usersLiked: userId }
       Sauce.updateOne({_id: req.params.id}, sauce).then(
-        () => {res.status(201).json({message: 'Success!'});
+        () => {res.status(201).json({message: 'Liked sauce!'});
         })
     } else {
       sauce.$inc = { dislikes: 1 }
       sauce.$addToSet = { usersDisliked: userId }
       Sauce.updateOne({_id: req.params.id}, sauce).then(
-        () => {res.status(201).json({message: 'Success!'});
+        () => {res.status(201).json({message: 'Disliked sauce!'});
         })
+        
     } else {
       Sauce.findOne({_id: req.params.id}).then(
         (sauce) => {
@@ -155,13 +156,13 @@ exports.likeSauce = (req, res, next) => {
         Sauce.updateMany({_id: req.params.id},
           { $pull: { usersLiked: userId }, $inc: { likes: -1 } },
        ).then(
-        () => {res.status(201).json({message: 'Success!'});
+        () => {res.status(201).json({message: 'Cancelled like!'});
         })
       } else {
         Sauce.updateMany({_id: req.params.id},
           { $pull: { usersDisliked: userId }, $inc: { dislikes: -1 } },
        ).then(
-        () => {res.status(201).json({message: 'Success!'});
+        () => {res.status(201).json({message: 'Cancelled dislike!'});
         })
       }
     }
