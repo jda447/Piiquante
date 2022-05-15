@@ -149,22 +149,23 @@ exports.likeSauce = (req, res, next) => {
         () => {res.status(201).json({message: 'Success!'});
         })
     } else {
-      Sauce.findOne({_id: req.params.id}, sauce).then(
+      Sauce.findOne({_id: req.params.id}).then(
         (sauce) => {
       if (sauce.usersLiked.includes(userId)) {
-        { sauce.$inc = { likes: -1 } }
-        { sauce.$pull = { usersLiked: { userId } } }
-        console.log(sauce.usersLiked);
-        Sauce.updateOne({_id: req.params.id}, sauce).then(
-          () => {res.status(201).json({message: 'Success!'});
-          })
-      } else {
-        { sauce.$inc = { likes: -1 } }
-        { sauce.$pull = { usersDisliked: { userId } } }
-      Sauce.updateOne({_id: req.params.id}, sauce).then(
+        Sauce.updateMany({_id: req.params.id},
+          { $pull: { usersLiked: userId }, $inc: { likes: -1 } },
+       ).then(
         () => {res.status(201).json({message: 'Success!'});
         })
-    }}).catch(
+      } else {
+        Sauce.updateMany({_id: req.params.id},
+          { $pull: { usersDisliked: userId }, $inc: { dislikes: -1 } },
+       ).then(
+        () => {res.status(201).json({message: 'Success!'});
+        })
+      }
+    }
+    ).catch(
       (error) => {
         res.status(400).json(error);
       }
