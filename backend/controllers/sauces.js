@@ -77,10 +77,10 @@ exports.modifySauce = (req, res, next) => {
   const sauce = {};
   const url = req.protocol + '://' + req.get('host');
   if (req.file) {
+    sauce.imageUrl = url + '/images/' + req.file.filename,
     sauce.name = req.body.name,
     sauce.manufacturer = req.body.manufacturer,
     sauce.description= req.body.description,
-    sauce.imageUrl = url + '/images/' + req.file.filename,
     sauce.mainPepper = req.body.mainPepper,
     sauce.heat = req.body.heat
   } else {
@@ -156,13 +156,13 @@ exports.likeSauce = (req, res, next) => {
       Sauce.findOne({_id: req.params.id}).then(
         (sauce) => {
       if (sauce.usersLiked.includes(userId)) {
-        Sauce.updateMany({_id: req.params.id},
+        Sauce.updateOne({_id: req.params.id},
           { $pull: { usersLiked: userId }, $inc: { likes: -1 } },
        ).then(
         () => {res.status(201).json({message: 'Cancelled like!'});
         })
       } else {
-        Sauce.updateMany({_id: req.params.id},
+        Sauce.updateOne({_id: req.params.id},
           { $pull: { usersDisliked: userId }, $inc: { dislikes: -1 } },
        ).then(
         () => {res.status(201).json({message: 'Cancelled dislike!'});
