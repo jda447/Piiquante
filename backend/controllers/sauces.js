@@ -78,11 +78,7 @@ exports.modifySauce = (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
   if (req.file) {
     sauce.imageUrl = url + '/images/' + req.file.filename,
-    sauce.name = req.body.name,
-    sauce.manufacturer = req.body.manufacturer,
-    sauce.description= req.body.description,
-    sauce.mainPepper = req.body.mainPepper,
-    sauce.heat = req.body.heat
+    Sauce.updateOne({_id: req.params.id}, sauce)
   } else {
     sauce.name = req.body.name,
     sauce.manufacturer = req.body.manufacturer,
@@ -91,7 +87,7 @@ exports.modifySauce = (req, res, next) => {
     sauce.heat = req.body.heat }
   Sauce.updateOne({_id: req.params.id}, sauce).then(
         () => 
-      {res.status(201).json(sauce);
+      {res.status(201).json({message: 'modified sauce!'});
     })
   .catch(
     (error) => {
