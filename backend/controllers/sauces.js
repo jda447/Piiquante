@@ -83,11 +83,11 @@ exports.modifySauce = (req, res, next) => {
     sauce.description= req.body.description,
     sauce.mainPepper = req.body.mainPepper,
     sauce.heat = req.body.heat
-    Sauce.updateOne({_id: req.params.id}, sauce)
   } else {
     sauce.name = req.body.name,
     sauce.manufacturer = req.body.manufacturer,
-    sauce.description= req.body.description,
+    sauce.description = req.body.description,
+    sauce.imageUrl = req.body.imageUrl,
     sauce.mainPepper = req.body.mainPepper,
     sauce.heat = req.body.heat }
   Sauce.updateOne({_id: req.params.id}, sauce).then(
