@@ -76,21 +76,17 @@ exports.getAllSauces = (req, res, next) => {
 exports.modifySauce = (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
   const sauce = req.body;
+  const urlString = url + '/images/' + req.file.filename;
    
   if (req.file) {
-    const sauce = req.body;
-    const modifiedSauce = { name: sauce.name,
-      manufacturer: sauce.manufacturer,
-      description: sauce.description,
-      imageUrl: url + '/images/' + req.file.filename,
-      mainPepper: sauce.mainPepper,
-      heat: sauce.heat }
-      Object.assign(sauce, modifiedSauce);
+    const modifiedSauce = sauce.imageUrl = urlString;
+      let newSauce = Object.assign(sauce, modifiedSauce);
+      console.log(newSauce);
     }
 
     Sauce.updateOne({_id: req.params.id}, sauce
         ).then(    
-      (sauce) => {
+      () => {
         res.status(201).json(sauce);
       }
   ).catch(
