@@ -78,11 +78,16 @@ exports.modifySauce = (req, res, next) => {
   const sauce = req.body;
    
   if (req.file) {
-    const modifiedSauce = {imageUrl: url + '/images/' + req.file.filename};
-      Object.assign(sauce, modifiedSauce);
-      console.log(sauce);
+    const originalSauce = { name: sauce.name,
+      manufacturer: sauce.manufacturer,
+      description: sauce.description,
+      mainPepper: sauce.mainPepper,
+      heat: sauce.heat }
+      
+    const modifiedSauce = {imageUrl: url + '/images/' + req.file.filename}
+    const finalResult = Object.assign(originalSauce, modifiedSauce);
+    console.log(finalResult);
     }
-    
     Sauce.updateOne({_id: req.params.id}, sauce)
         .then(    
       (sauce) => {
