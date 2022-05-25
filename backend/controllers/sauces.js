@@ -75,15 +75,15 @@ exports.getAllSauces = (req, res, next) => {
 
 exports.modifySauce = (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
-  let sauce = req.body || {};
+  let sauce = JSON.parse(req.body.sauce) || {};
   
   if (req.file) {
     sauce.imageUrl = url + '/images/' + req.file.filename;
     req.body.sauce = JSON.parse(req.body.sauce);
     console.log(sauce);
   }
-
-    Sauce.updateOne({_id: req.params.id}, sauce)
+  
+  Sauce.updateOne({_id: req.params.id}, sauce)
       .then(    
     (sauce) => {
       res.status(201).json(sauce);
