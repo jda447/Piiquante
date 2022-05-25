@@ -75,11 +75,11 @@ exports.getAllSauces = (req, res, next) => {
 
 exports.modifySauce = (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
-  let sauce = JSON.parse(req.body.sauce) || {};
+  let sauce = req.body || {};
   
   if (req.file) {
+    sauce = JSON.parse(req.body.sauce);
     sauce.imageUrl = url + '/images/' + req.file.filename;
-    req.body.sauce = JSON.parse(req.body.sauce);
     console.log(sauce);
   }
   
