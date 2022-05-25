@@ -76,13 +76,12 @@ exports.getAllSauces = (req, res, next) => {
 exports.modifySauce = (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
   let sauce = req.body || {};
-  
+
   if (req.file) {
     sauce = JSON.parse(req.body.sauce);
     sauce.imageUrl = url + '/images/' + req.file.filename;
-    console.log(sauce);
   }
-  
+
   Sauce.updateOne({_id: req.params.id}, sauce)
       .then(    
     (sauce) => {
@@ -94,98 +93,6 @@ exports.modifySauce = (req, res, next) => {
     }
   )
 };
-
-
-// exports.modifySauce = (req, res, next) => {
-//   const url = req.protocol + '://' + req.get('host');
-//   const sauce = req.body;
-//   let newImage = '';
-   
-//   if (req.file) {
-//     newImage = url + '/images/' + req.file.filename
-//     } else {
-//       newImage = sauce.imageUrl
-//     }
-//     Sauce.updateOne({_id: req.params.id},
-//       { $set: { name: sauce.name,
-//         manufacturer: sauce.manufacturer,
-//         description: sauce.description,
-//         imageUrl: newImage,
-//         mainPepper: sauce.mainPepper,
-//         heat: sauce.heat }}
-//         ).then(    
-//       (sauce) => {
-//         res.status(201).json(sauce);
-//       }
-//   ).catch(
-//     (error) => {
-//       res.status(400).json(error);
-//     }
-//   )
-// };
-
-
-// exports.modifySauce = (req, res, next) => {
-//   const sauce = req.body;
-//   const url = req.protocol + '://' + req.get('host');
-//   if (req.file) {
-//     sauce.imageUrl = url + '/images/' + req.file.filename,
-//     sauce.name = req.body.name,
-//     sauce.manufacturer = req.body.manufacturer,
-//     sauce.description= req.body.description,
-//     sauce.mainPepper = req.body.mainPepper,
-//     sauce.heat = req.body.heat
-//   } else {
-//     sauce.name = req.body.name,
-//     sauce.manufacturer = req.body.manufacturer,
-//     sauce.description = req.body.description,
-//     sauce.imageUrl = req.body.imageUrl,
-//     sauce.mainPepper = req.body.mainPepper,
-//     sauce.heat = req.body.heat }
-//   Sauce.updateOne({_id: req.params.id}, sauce).then(
-//         (sauce) => 
-//       {res.status(201).json(sauce);
-//     })
-//   .catch(
-//     (error) => {
-//       res.status(400).json(error);
-//     }
-//   )
-// };
-
-// exports.modifySauce = (req, res, next) => {
-//   if (req.file) {
-//     const url = req.protocol + '://' + req.get('host');
-//     Sauce.updateOne({_id: req.params.id},
-//       { $set: { name: req.body.name,
-//         manufacturer: req.body.manufacturer,
-//         description: req.body.description,
-//         imageUrl: url + '/images/' + req.file.filename,
-//         mainPepper: req.body.mainPepper,
-//         heat: req.body.heat }}
-    // ).then(    
-    //   (sauce) => {
-    //     res.status(201).json(sauce);
-    //   })
-//     } else {
-//       Sauce.updateOne({_id: req.params.id},
-//         { $set: { name: req.body.name,
-//           manufacturer: req.body.manufacturer,
-//           description: req.body.description,
-//           mainPepper: req.body.mainPepper,
-//           heat: req.body.heat }}
-//       ).then(    
-//       (sauce) => {
-//         res.status(201).json(sauce);
-//       }
-//       ).catch(
-//         (error) => {
-//           res.status(400).json(error);
-//         }
-//       )
-//     }
-//   };
-
 
 exports.likeSauce = (req, res, next) => {
   const sauce = {};
