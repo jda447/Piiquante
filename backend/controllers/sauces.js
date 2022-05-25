@@ -79,24 +79,20 @@ exports.modifySauce = (req, res, next) => {
   
   if (req.file) {
     sauce.imageUrl = url + '/images/' + req.file.filename;
+    req.body.sauce = JSON.parse(req.body.sauce);
     console.log(sauce);
-    Sauce.updateOne({_id: req.params.id}, sauce)
-     .then(
-        () => {res.status(201).json({sauce});
-        })
-
-    } else {
-      Sauce.updateOne({_id: req.params.id}, sauce)
-        .then(    
-      () => {
-        res.status(201).json(sauce);
-      }
-    ).catch(
-      (error) => {
-        res.status(400).json(error);
-      }
-    )
   }
+
+    Sauce.updateOne({_id: req.params.id}, sauce)
+      .then(    
+    (sauce) => {
+      res.status(201).json(sauce);
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json(error);
+    }
+  )
 };
 
 
