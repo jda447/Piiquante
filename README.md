@@ -1,4 +1,4 @@
-Project 5 - Secure API JavaScript (backend)
+Project 5 - Secure API, JavaScript (backend)
 
 HotTakes
 
